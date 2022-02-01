@@ -70,6 +70,6 @@ task cleanAll(dependsOn: [
 
 task integrationTest(dependsOn: ':sample:runDebugAndroidTestScreenshotTest') {
   doLast {
-    assert taskLogOutput.toString().contains('Found 12 screenshots')
+    assert taskLogOutput.toString().contains('Found 10 screenshots')
   }
 }

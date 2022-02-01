@@ -15,6 +15,7 @@
  */
 
 buildscript {
+//  apply from: rootProject.file('../versions.gradle')
   repositories {
     mavenCentral()
     google()
@@ -38,6 +39,15 @@ final GENERATED_BUILD_DIR =
     new File(
         projectDir.absolutePath,
         "src/generated/kotlin/${GENERATED_PACKAGE_NAME.replace('.', '/')}")
+
+gradlePlugin {
+  plugins {
+    simplePlugin {
+      id = 'com.facebook.testing.screenshot'
+      implementationClass = 'com.facebook.testing.screenshot.build.ScreenshotsPlugin'
+    }
+  }
+}
 
 task generateBuildConfig {
   doLast {
@@ -104,5 +114,4 @@ task py3Tests(type: Exec) {
   workingDir file('./src/py')
   commandLine 'python3', '-m', 'unittest', 'discover'
 }
-
 

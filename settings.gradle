@@ -13,5 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+pluginManagement {
+  plugins {
+    id 'com.facebook.testing.screenshot' version "0.16.0"
+  }
 
-include 'core', 'plugin', 'layout-hierarchy-common', 'layout-hierarchy-litho', 'sample'
+}
+
+include 'core', 'plugin', 'layout-hierarchy-common',  'sample'

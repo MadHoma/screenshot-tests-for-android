@@ -24,7 +24,8 @@ buildscript {
 
   dependencies {
     classpath plugs.agp
-    classpath plugs.screenshot
+    classpath files('lib/plugin.jar')
+//    classpath "com.facebook.testing.screenshot:plugin:0.14.0"
     classpath plugs.kotlin
   }
 }
@@ -47,7 +48,7 @@ android {
   compileSdkVersion versions.compileSdk
   defaultConfig {
     applicationId "com.facebook.testing.screenshot.example"
-    minSdkVersion 15
+    minSdkVersion 21
     targetSdkVersion versions.targetSdk
     versionCode 1
     versionName "1.0"
@@ -60,20 +61,15 @@ android {
 }
 
 dependencies {
+  implementation project(':core')
+  implementation project(':layout-hierarchy-common')
   implementation deps.kotlinStdlib
 
   implementation deps.supportAppCompat
   implementation deps.supportDesign
 
-  implementation deps.lithoCore
-  implementation deps.lithoWidget
-  implementation deps.lithoAnnotations
-  kapt deps.lithoProcessor
-
   implementation deps.soLoader
 
-  androidTestImplementation deps.screenshotTestCommon
-  androidTestImplementation deps.screenshotTestLitho
   androidTestImplementation deps.junit
   androidTestImplementation deps.testRunner
   androidTestUtil deps.orchestrator
@@ -86,4 +82,6 @@ dependencies {
 
 screenshots {
   multipleDevices true
+  addDeps = false
+  pythonExecutable = "python2"
 }
