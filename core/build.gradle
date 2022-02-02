@@ -15,6 +15,7 @@
  */
 
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
 apply plugin: "com.vanniktech.maven.publish"
 
 group = 'com.facebook.testing.screenshot'
@@ -59,4 +60,6 @@ dependencies {
   androidTestImplementation deps.mockito
   androidTestImplementation deps.dexmakerMockito
   androidTestImplementation deps.hamcrest
+  implementation "androidx.core:core-ktx:1.7.0"
+  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }

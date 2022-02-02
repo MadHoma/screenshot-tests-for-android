@@ -22,11 +22,11 @@ import org.junit.Before;
 
 /** Tests {@link RecordBuilderImpl} */
 public class RecordBuilderImplTest {
-  private ScreenshotImpl mScreenshotImpl;
+  private ScreenshotImpl2 mScreenshotImpl;
 
   @Before
   public void setUp() throws Exception {
-    mScreenshotImpl = mock(ScreenshotImpl.class);
+    mScreenshotImpl = mock(ScreenshotImpl2.class);
   }
 
   public void testIncompleteTiles() throws Throwable {

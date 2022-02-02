@@ -20,11 +20,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import androidx.test.platform.app.InstrumentationRegistry
+import androidx.test.runner.AndroidJUnit4
 import com.facebook.testing.screenshot.Screenshot
 import com.facebook.testing.screenshot.ViewHelpers
+import org.junit.Before
 import org.junit.Test
+import org.junit.runner.RunWith
 
+@RunWith(AndroidJUnit4::class)
 class StandardAndroidViewTest {
+
+  @Before
+  fun before() {
+    InstrumentationRegistry.getInstrumentation().getUiAutomation()
+  }
+
   @Test
   @Throws(Throwable::class)
   fun testRendering() {

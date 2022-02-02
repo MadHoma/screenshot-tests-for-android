@@ -48,13 +48,13 @@ import org.junit.Test;
 import org.junit.rules.Timeout;
 import org.junit.runner.RunWith;
 
-/** Tests for {@link ScreenshotImpl} */
+/** Tests for {@link ScreenshotImpl2} */
 @RunWith(AndroidJUnit4.class)
 public class ScreenshotImplTest {
   private AlbumImpl mAlbumImpl;
   private AlbumImpl mSecondAlbumImpl;
   private TextView mTextView;
-  private ScreenshotImpl mScreenshot;
+  private ScreenshotImpl2 mScreenshot;
   private ScreenshotDirectories mScreenshotDirectories;
 
   @Rule public Timeout mTimeout = new Timeout(60000);
@@ -75,7 +75,7 @@ public class ScreenshotImplTest {
 
     measureAndLayout();
     // For most of the tests, we send a null album to verify against
-    mScreenshot = new ScreenshotImpl(mAlbumImpl);
+    mScreenshot = new ScreenshotImpl2(mAlbumImpl);
   }
 
   @After
@@ -201,7 +201,6 @@ public class ScreenshotImplTest {
 
   public void doTestTiling(boolean enableReconfigure) throws Throwable {
     mScreenshot.setTileSize(1000);
-    mScreenshot.setEnableBitmapReconfigure(enableReconfigure);
 
     final int VIEW_WIDTH = 43;
     final int VIEW_HEIGHT = 32;
@@ -257,17 +256,6 @@ public class ScreenshotImplTest {
     }
 
     assertBitmapsEqual(full, reconstructedFromTiles);
-  }
-
-  @Test
-  public void testTiling() throws Throwable {
-    doTestTiling(false);
-  }
-
-  @SdkSuppress(minSdkVersion = 19)
-  @Test
-  public void testTilingWithReconfigure() throws Throwable {
-    doTestTiling(true);
   }
 
   @Test
