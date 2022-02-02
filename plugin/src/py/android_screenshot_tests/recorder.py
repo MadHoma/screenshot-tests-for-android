@@ -16,6 +16,7 @@
 import json
 import os
 import shutil
+import subprocess
 import sys
 import tempfile
 import xml.etree.ElementTree as ET
@@ -144,11 +145,13 @@ class Recorder:
                 diff = join(self._failure_output, diff_name)
 
                 if not self._is_image_same(expected, actual, diff):
-                    expected_name = screenshot["name"] + "_expected.png"
-                    actual_name = screenshot["name"] + "_actual.png"
-
-                    shutil.copy(actual, join(self._failure_output, actual_name))
-                    shutil.copy(expected, join(self._failure_output, expected_name))
+                    # expected_name = screenshot["name"] + "_expected.png"
+                    # actual_name = screenshot["name"] + "_actual.png"
+                    subprocess.call(
+                        ['montage', '-tile', '0x0', '-geometry', '+0+0', expected, actual, diff,
+                         diff])
+                    # shutil.copy(actual, join(self._failure_output, actual_name))
+                    # shutil.copy(expected, join(self._failure_output, expected_name))
 
                     failures.append((expected, actual))
             else:
