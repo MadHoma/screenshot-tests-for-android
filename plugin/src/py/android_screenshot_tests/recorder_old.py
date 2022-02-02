@@ -21,8 +21,7 @@ import tempfile
 import xml.etree.ElementTree as ET
 from os.path import join
 
-from wand.color import Color
-from wand.image import Image
+from PIL import Image, ImageChops, ImageDraw
 
 from . import common
 
@@ -39,7 +38,7 @@ class Recorder:
         self._failure_output = failure_output
 
     def _get_image_size(self, file_name):
-        with Image(filename=file_name) as im:
+        with Image.open(file_name) as im:
             return im.size
 
     def _copy(self, name, w, h):
@@ -59,17 +58,16 @@ class Recorder:
             input_file = common.get_image_file_name(name, 0, j)
             canvasheight += self._get_image_size(join(self._input, input_file))[1]
 
-        im = Image(width=canvaswidth, height=canvasheight)
+        im = Image.new("RGBA", (canvaswidth, canvasheight))
+
         for i in range(w):
             for j in range(h):
                 input_file = common.get_image_file_name(name, i, j)
-                width = (i * tilewidth)
-                height = (j * tileheight)
-                with Image(filename=join(self._input, input_file)) as input_image:
-                    im.composite(input_image, width, height)
+                with Image.open(join(self._input, input_file)) as input_image:
+                    im.paste(input_image, (i * tilewidth, j * tileheight))
                     input_image.close()
 
-        im.save(filename=join(self._output, name + ".png"))
+        im.save(join(self._output, name + ".png"))
         im.close()
 
     def _get_metadata_json(self):
@@ -90,40 +88,22 @@ class Recorder:
             shutil.rmtree(self._output)
         os.makedirs(self._output)
 
-    # def _is_image_same(self, file1, file2, failure_file):
-    #     with Image.open(file1) as im1, Image.open(file2) as im2:
-    #         diff_image = ImageChops.difference(im1, im2)
-    #         try:
-    #             diff = diff_image.getbbox()
-    #             if diff is None:
-    #                 return True
-    #             else:
-    #                 if failure_file:
-    #                     diff_list = list(diff) if diff else []
-    #                     draw = ImageDraw.Draw(im2)
-    #                     draw.rectangle(diff_list, outline=(255, 0, 0))
-    #                     im2.save(failure_file)
-    #                 return False
-    #         finally:
-    #             diff_image.close()
-
     def _is_image_same(self, file1, file2, failure_file):
-        base, img = self.image_array(file1, file2)
-        result_image, result_metric = base.compare(img, metric='absolute')
-        if result_metric != 0:
-            with result_image:
-                if failure_file:
-                    result_image.save(filename=failure_file)
-                return False
-        return True
-
-    def image_array(self, file1, file2):
-        with Image(filename=file1) as img1:
-            with Image(filename=file2) as img2:
-                if img1.width > img2.width | img1.height > img2.height:
-                    return Image(img1), Image(img2)
+        with Image.open(file1) as im1, Image.open(file2) as im2:
+            diff_image = ImageChops.difference(im1, im2)
+            try:
+                diff = diff_image.getbbox()
+                if diff is None:
+                    return True
                 else:
-                    return Image(img2), Image(img1)
+                    if failure_file:
+                        diff_list = list(diff) if diff else []
+                        draw = ImageDraw.Draw(im2)
+                        draw.rectangle(diff_list, outline=(255, 0, 0))
+                        im2.save(failure_file)
+                    return False
+            finally:
+                diff_image.close()
 
     def record(self):
         self._clean()
