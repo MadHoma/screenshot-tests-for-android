@@ -21,7 +21,7 @@ buildscript {
   repositories {
     mavenCentral()
     google()
-    jcenter()
+    gradlePluginPortal()
   }
 
   dependencies {
@@ -29,6 +29,7 @@ buildscript {
     classpath plugs.versions
     classpath plugs.publish
     classpath plugs.dokka
+    classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.10'
   }
 }
 
@@ -37,7 +38,7 @@ allprojects {
   repositories {
     mavenCentral()
     google()
-    jcenter()
+    gradlePluginPortal()
   }
 }
 
